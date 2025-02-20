@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css')}}"
+    />
+    <title>Speed Typing Test</title>
+  </head>
+  <body>
+    <h1>Speed Typing Test</h1>
+    <form action="/" method="post">
+      <!-- Display the words in a clean, space-separated list -->
+      <p>
+        {% for word in words %} {{ word }} {% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+
+      <!-- Input field for typing the word -->
+      <label for="word">Start Typing: </label>
+      <input type="text" id="word" name="word" />
+
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
