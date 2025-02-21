@@ -1,27 +1,40 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, session
 from words import words
-import random 
+import time
 
 #create the app 
 app = Flask(__name__)
-# app.config("SECRET_KEY") = "BIgSecret550600"
+app.config["SECRET_KEY"] = "BIgSecret550600"
 
-def random_words():
+
+def get_words():
     return words[:50]
 
-    
 
-#routes 
 @app.route("/", methods=["GET", "POST"])
 def home():
-   return render_template("home.html", words=random_words())
-    
+    # Ensure session contains start_time
+    if "start_time" not in session:
+        session["start_time"] = time.time()  # Store start time in session
+        session["word_count"] = 0  # Initialize word count
 
-#display the text to enter
+    feedback = "Start typing! DO NOT add a comma between the words."
 
-#check if the user input matches the displayed text 
+    if request.method == "POST":
+        elapsed_time = time.time() - session["start_time"]  # Now session["start_time"] exists
 
-#measure the time and how many correct words were entered 7
+        # Only process input if time is up (1 minute)
+        if elapsed_time >= 60:
+            user_input = request.form["user_text"].strip()
+            typed_words = user_input.split()
+            correct_words = [word for word in typed_words if word in words]
+
+            session["word_count"] += len(correct_words)  # Update word count
+            feedback = f"You typed {session['word_count']} correct words in 1 minute!"
+
+            session.clear()  # Clear session after submission
+
+    return render_template("home.html", words=get_words(), feedback=feedback)
 
 
 

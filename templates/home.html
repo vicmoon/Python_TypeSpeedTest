@@ -11,18 +11,58 @@
   </head>
   <body>
     <h1>Speed Typing Test</h1>
-    <form action="/" method="post">
-      <!-- Display the words in a clean, space-separated list -->
-      <p>
-        {% for word in words %} {{ word }} {% if not loop.last %}, {% endif %}
-        {% endfor %}
-      </p>
 
-      <!-- Input field for typing the word -->
-      <label for="word">Start Typing: </label>
-      <input type="text" id="word" name="word" />
+    <!-- Words Displayed for Typing -->
+    <p>
+      {% for word in words %} {{ word }} {% if not loop.last %}, {% endif %} {%
+      endfor %}
+    </p>
 
-      <button type="submit">Submit</button>
+    <!-- Countdown Timer -->
+    <h2>Time Left: <span id="timer">60</span> seconds</h2>
+
+    <!-- Feedback -->
+
+    <p class="feedback">{{ feedback }}</p>
+
+    <!-- Start Button -->
+    <button id="startButton" name="">Start</button>
+
+    <!-- Typing Form -->
+    <form action="/" method="post" id="typingForm">
+      <label for="user_text">Type here → </label>
+      <input type="text" name="user_text" id="wordInput" disabled />
+      <button type="submit" id="submitButton" disabled>Submit</button>
     </form>
+
+    <script>
+      let timeLeft = 60; // Set timer duration
+      let timerInterval;
+
+      document
+        .getElementById('startButton')
+        .addEventListener('click', function () {
+          // Start the countdown
+          timerInterval = setInterval(updateTimer, 1000);
+
+          // Enable input field and submit button
+          document.getElementById('wordInput').disabled = false;
+          document.getElementById('submitButton').disabled = false;
+
+          // Hide the Start button after clicking
+          this.style.display = 'none';
+        });
+
+      function updateTimer() {
+        if (timeLeft > 0) {
+          timeLeft--;
+          document.getElementById('timer').textContent = timeLeft;
+          document.getElementById('submitButton').disabled = true;
+        } else {
+          clearInterval(timerInterval); // Stop the timer
+          document.getElementById('submitButton').disabled = false;
+        }
+      }
+    </script>
   </body>
 </html>
