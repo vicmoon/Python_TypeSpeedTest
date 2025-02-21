@@ -1,10 +1,13 @@
 from flask import Flask, render_template, url_for, request, session
 from words import words
 import time
+import os
 
 #create the app 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "BIgSecret550600"
+# app.config["SECRET_KEY"] = "BIgSecret550600"
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+
 
 
 def get_words():
